@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common'
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
 import { AppService } from './app.service'
 import { PrismaClient } from '@prisma/client'
 
@@ -11,10 +11,10 @@ export class AppController {
   }
 
   @Get(':id')
-  getHello(@Param('id') id: number) {
+  getHello(@Param('id', ParseIntPipe) id: number) {
     return this.prisma.article.findUnique({
       where: {
-        id: Number(id),
+        id,
       },
     })
   }
