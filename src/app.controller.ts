@@ -1,12 +1,21 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
 import { AppService } from './app.service'
+import { PrismaClient } from '@prisma/client'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  prisma: PrismaClient
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello()
+  constructor(private readonly appService: AppService) {
+    this.prisma = new PrismaClient()
+  }
+
+  @Get(':id')
+  getHello(@Param('id') id: number) {
+    return this.prisma.article.findUnique({
+      where: {
+        id: Number(id),
+      },
+    })
   }
 }
